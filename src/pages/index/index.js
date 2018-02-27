@@ -55,6 +55,6 @@ new Vue({
       }
     },
     components:{
-        Foot
+        Foot,Swipe
     }
 })

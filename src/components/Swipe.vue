@@ -1,17 +1,49 @@
 <template>
    <div class="swiper-container">
       <div class="swiper-wrapper">
-        <div class="swp-page">
-          <a class="js-no-follow" href="https://h5.koudaitong.com/v2/index/rukou">
-            <img class="goods-main-photo fadeIn" src="https://img.yzcdn.cn/upload_files/2016/07/29/Fl3T06Mu7TpIhR4L1s2tzm8cZrgt.jpg">
+        <div class="swp-page swiper-slide" v-for="list in lists">
+          <a class="js-no-follow" :href="list.clickUrl">
+            <img class="goods-main-photo fadeIn" :src="list.image">
           </a>
         </div>
       </div>
+      <div class="swiper-pagination"></div>
     </div>
 </template>
 <script>
 //轮播组件只负责功能性和展示，不用数据。
-// import Swiper from 'swiper'
+//xxx.vue默认变成vue的实例，相当于也是个options
+//swiper对dom节点进行操作的，dom节点什么时候生成呢？mounted
+import Swiper from "swiper";
+import "swiper/dist/css/swiper.css";
+
+export default {
+  name: "swipe",
+  props: {
+    //动态绑定
+    lists: Array
+  },
+  created() {
+    //  console.log('created',document.querySelector('.swiper-slide'))
+  },
+  mounted() {
+    //  console.log('mounted',document.querySelector('.swiper-slide'))
+    var mySwiper = new Swiper(".swiper-container", {
+      // Optional parameters
+      pagination:{el:'.swiper-pagination'},
+      autoplay:{delay:5000},
+      loop: true,
+    });
+  },
+  watch: {
+    // lists(val,oldVal){
+    //     console.log('before nextTick',document.querySelector('.swiper-slide'))
+    //     this.$nextTick(()=>{
+    //        console.log('after nextTick',document.querySelector('.swiper-slide'))
+    //     })
+    // }
+  }
+};
 </script>
 <style>
 
