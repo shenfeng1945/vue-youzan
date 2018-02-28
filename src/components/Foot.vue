@@ -1,18 +1,29 @@
 <template>
  <div class="bottom-nav">
     <ul>
-      <li :class="{active:index==0}"><a href="index.html"><i class="icon-home"></i><div>有赞</div></a></li>
-      <li :class="{active:index==1}"><a href="https://maijia.youzan.com/mars/category"><i class="icon-category"></i><div>分类</div></a></li>
-      <li :class="{active:index==2}"><a href="https://h5.youzan.com/v2/trade/cart?f_platform=yzapp&amp;source=yzapp"><i class="icon-cart"></i><div>购物车</div></a></li>
-      <li :class="{active:index==3}"><a href="https://h5.youzan.com/v2/buyer/member"><i class="icon-user"></i><div>我</div></a></li>
+      <li :class="{active:index1==index}"
+          v-for="(list,index) in lists"
+          :key="index"
+      ><a :href="list.url"><i :class="list.icon"></i><div>{{list.title}}</div></a></li>
     </ul>
   </div>
 </template>
 <script>
 // 底部导航为什么要做成组件呢？因为可以在其它地方使用。
 //点个人中心和购物得判断是否登陆。
+let navConfig = [
+    {url:'index.html',title:'有赞',icon:'icon-home'},
+    {url:'category.html',title:'分类',icon:'icon-category'},
+    {url:'cart.html',title:'购物车',icon:'icon-cart'},
+    {url:'member.html',title:'我',icon:'icon-user'}
+]
 export default {
-  props:['index']
+  props:['index1'],
+  data(){
+    return {
+      lists:navConfig
+    }
+  }
 }
 </script>
 

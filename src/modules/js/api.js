@@ -3,7 +3,8 @@ let url = {
   banner:'/index/banner',
   topLists:'/category/topList',
   rankLists:'/category/rank',
-  subLists:'/category/subList'
+  subLists:'/category/subList',
+  searchLists:'/search/list'
 }
 
 //开发环境和真实环境的切换

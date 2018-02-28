@@ -80,7 +80,7 @@
                       </div>
                       <div class="detail">
                         <div class="title">{{list.name}}</div>
-                        <div class="price">￥{{list.price|number}}</div>
+                        <div class="price">￥{{list.price|currency}}</div>
                         <div class="recommend">
                           <span>推荐值:</span>
                           <span>{{list.recommend}}</span>
@@ -125,7 +125,11 @@
           <div id="scroll-main-content" class="js-main-content inner-content" style="height: 534px; transform: translate3d(0px, 0px, 0px);" v-if="topIndex>0&&subLists">
             <h3 class="category-title">热门品牌 </h3>
             <ul class="category-content">
-              <li class="category-item js-category-item" v-for="(list,index) in subLists.brandList" :key="index" data-item-id="85" data-item-name="良品铺子">
+              <li class="category-item js-category-item" 
+                  v-for="(list,index) in subLists.brandList" 
+                  :key="index" 
+                  @click="toSearch(list)"
+                  data-item-id="85" data-item-name="良品铺子">
                 <img :src="list.image" alt="良品铺子" class="category-img">
                 <span class="category-item-name">
                 {{list.name}}            </span>
@@ -134,7 +138,10 @@
             </ul>
             <h3 class="category-title"> 热门分类  </h3>
             <ul class="category-content">
-              <li class="category-item js-category-item" v-for="(list,index) in subLists.categoryList" data-item-id="10" data-item-name="水果">
+              <li class="category-item js-category-item" 
+                  v-for="(list,index) in subLists.categoryList" 
+                  @click="toSearch(list)"
+                  data-item-id="10" data-item-name="水果">
                 <img :src="list.image" alt="水果" class="category-img">
                 <span class="category-item-name">
                 {{list.name}}          </span>
@@ -145,7 +152,7 @@
       </div>
     </div>
   </div>
-  <foot :index="1"></foot>
+  <foot :index1="1"></foot>
   <!-- <div class="bottom-nav">
     <ul>
       <li><a href="https://maijia.youzan.com/mars/homepage"><i class="icon-home"></i><div>有赞</div></a></li>

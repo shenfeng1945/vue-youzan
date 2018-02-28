@@ -3,7 +3,7 @@ import './category.css'
 import Vue from 'vue'
 import axios from 'axios'
 import url from 'js/api'
-import Foot from 'components/Foot.vue'
+import mixin from 'js/mixin'
 
 new Vue({
     el:'#app',
@@ -39,14 +39,11 @@ new Vue({
         axios.post(url.rankLists).then(res=>{
           this.rankLists = res.data.data
         })
+      },
+      toSearch(list){
+        location.href = `search.html?keyword=${list.name}&cate_id=${list.id}`
       }
     },
-    filters:{
-      number(price){
-        return price.toFixed(2)
-      }
-    },
-    components:{
-      Foot
-    }
+    mixins:[mixin]
+    
 })
