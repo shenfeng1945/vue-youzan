@@ -1,7 +1,7 @@
 <template>
    <div class="swiper-container">
       <div class="swiper-wrapper">
-        <div class="swp-page swiper-slide" v-for="list in lists">
+        <div class="swp-page swiper-slide" v-for="(list,index) in lists" :key="index">
           <a class="js-no-follow" :href="list.clickUrl">
             <img class="goods-main-photo fadeIn" :src="list.image">
           </a>
@@ -14,6 +14,7 @@
 //轮播组件只负责功能性和展示，不用数据。
 //xxx.vue默认变成vue的实例，相当于也是个options
 //swiper对dom节点进行操作的，dom节点什么时候生成呢？mounted
+//如果lists是个字符串数组，这个组件处理不了，得预先处理，即该组件只接受统一的格式。
 import Swiper from "swiper";
 import "swiper/dist/css/swiper.css";
 

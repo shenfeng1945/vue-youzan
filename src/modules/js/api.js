@@ -6,6 +6,8 @@ let url = {
   subLists:'/category/subList',
   searchLists:'/search/list',
   details:'/goods/details',
+  dealList:'/goods/deal',
+  addCart:'/cart/add'
 }
 
 //开发环境和真实环境的切换

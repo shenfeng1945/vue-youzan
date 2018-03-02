@@ -2,7 +2,7 @@ import Foot from 'components/Foot.vue'
 let mixin = {
     filters: {
         currency(price) {
-            return price.toFixed(2)
+              return price.toFixed(2)
         }
     },
     components: {
