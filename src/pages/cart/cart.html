@@ -54,7 +54,8 @@
                       v-for="(good,goodIndex) in shop.goodsList"
                       @touchstart="start($event,good)"
                       @touchend="end($event,shopIndex,good,goodIndex)"
-                      :ref="'goods-'+shopIndex+'-'+goodIndex">
+                      :ref="'goods-'+shopIndex+'-'+goodIndex"
+                      :key="good.id">
                     <div>
                       <div class="check-container" @click="chooseGood(shop,good)">
                         <span class="check" :class="{checked:isEditing?good.removeCheck:good.isCheck}"></span>

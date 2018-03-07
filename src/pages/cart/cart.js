@@ -200,8 +200,10 @@ new Vue({
               this.removeShop()
            }
            this.removePopup = false
-           //再我删除滑动过的商品时，让它的下一个不要滑出头
-           this.touchAnimate(shopIndex,goodIndex,{left:'0px'})
+           //再我删除滑动过的商品时，让它的下一个不要滑出头,下面这个不行，有动画
+          //  this.touchAnimate(shopIndex,goodIndex,{left:'0px'})
+          //下面这个也不是最好的方法，应该对v-for进行唯一识别，这样v-for会重排，用:key="good.id"
+          // this.$refs[`goods-${shopIndex}-${goodIndex}`][0].style.left='0px'
          })
       }else{
         let ids = []
