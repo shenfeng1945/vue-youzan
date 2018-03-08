@@ -12,9 +12,10 @@ class Address {
         return fetch(url.addressRemove,id)
     }
     static update(data){
-        return fetchu(url.addressUpdate,data)
+        return fetch(url.addressUpdate,data)
     }
     static setDefault(id){
         return fetch(url.addressSetDefault)
     }
 }
+export default Address

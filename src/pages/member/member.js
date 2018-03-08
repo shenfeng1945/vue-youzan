@@ -16,9 +16,12 @@ let routes = [{
         redirect:'all'
     },{
         path:'all',
+        //命名视图
+        name:'all',
         component:require('./components/all.vue')
     },{
         path:'form',
+        name:'form',
         component:require('./components/form.vue')
     }]
 }]
