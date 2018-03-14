@@ -61,7 +61,11 @@ const store = new Vuex.Store({
       },
       updateAction({commit},instance){
         Address.update(instance).then(res=>{
-          commit('update',instance)
+         // commit('update',res.data.data) 实际开发
+         let data = res.data.data
+         data.id = instance.id
+         data.isDefault = instance.isDefault
+         commit('update',data)
         })
       } ,
       setDefaultAction({commit},id){

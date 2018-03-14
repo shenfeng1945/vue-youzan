@@ -16,7 +16,8 @@ export default {
            addressData:require('js/address.json'),
            cityLists:null,
            districtLists:null,
-           removeSuccess:false
+           removeSuccess:false,
+           isInit:true,//修改页面第一次加载时
         }
     },
     // computed:{
@@ -61,10 +62,9 @@ export default {
          this.cityLists = lists[index].children
          this.cityValue = -1
          this.districtValue = -1
-         if(this.type==='edit'){
+         if(this.type==='edit'&&this.isInit){
              this.cityValue = parseInt(this.instance.cityValue)
          }
-         
        },
        cityValue(val){
          if(val===-1){return}
@@ -76,8 +76,9 @@ export default {
            this.districtLists = lists[index].children
          }
          this.districtValue = -1
-         if(this.type==='edit'){
+         if(this.type==='edit'&&this.isInit){
              this.districtValue = parseInt(this.instance.districtValue)
+             this.isInit = false
          }
        }
     },
