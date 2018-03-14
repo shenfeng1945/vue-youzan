@@ -1,4 +1,5 @@
 import Address from 'js/addressService.js'
+import {mapState} from 'vuex'
 export default {
     data(){
         return {
@@ -11,11 +12,23 @@ export default {
            id:'',
            type:'',
            instance:'',
+           isDefault:false,
            addressData:require('js/address.json'),
            cityLists:null,
            districtLists:null,
            removeSuccess:false
         }
+    },
+    // computed:{
+    //   lists(){
+    //       return this.$store.state.lists
+    //   }
+    // },
+    // computed:mapState['lists'],
+    computed:{
+        ...mapState({
+            lists:state => state.lists
+        })
     },
     created(){
        let params = this.$route.params
@@ -28,9 +41,17 @@ export default {
            this.address = instance.address
            this.id = instance.id
            this.provinceValue = parseInt(instance.provinceValue)
+           this.isDefault = instance.isDefault
        }
     },
     watch:{
+       lists:{
+           handler(){
+             this.$router.go(-1)
+           },
+           //深度监听
+           deep:true
+       },
        provinceValue(val){
          if(val===-1){return}
          let lists = this.addressData.list
@@ -43,6 +64,7 @@ export default {
          if(this.type==='edit'){
              this.cityValue = parseInt(this.instance.cityValue)
          }
+         
        },
        cityValue(val){
          if(val===-1){return}
@@ -50,7 +72,9 @@ export default {
          let index = lists.findIndex(item=>{
              return item.value === val
          })
-         this.districtLists = lists[index].children
+         if(lists[index]){
+           this.districtLists = lists[index].children
+         }
          this.districtValue = -1
          if(this.type==='edit'){
              this.districtValue = parseInt(this.instance.districtValue)
@@ -61,33 +85,39 @@ export default {
       add(){
        //需要做非空和合法性校样
        let {name,tel,provinceValue,cityValue,districtValue,address,id} = this
-       let data = {name,tel,provinceValue,cityValue,districtValue,address,id}
+       let data = {name,tel,provinceValue,cityValue,districtValue,address}
        if(this.type==='add'){
-          Address.add(data).then(res=>{
-              this.$router.go(-1)
-          })
+        //   Address.add(data).then(res=>{
+        //       this.$router.go(-1)
+        //   })
+          this.$store.dispatch('addAction',data)
        }
        if(this.type==='edit'){
-         Address.update(data).then(res=>{
-            this.$router.go(-1)
-         }) 
+         data.id = id
+         data.isDefault = this.isDefault
+        //  Address.update(data).then(res=>{
+        //     this.$router.go(-1)
+        //  }) 
+         this.$store.dispatch('updateAction',data)
        }
       },
       remove(){
           if(window.confirm('确认删除吗')){
-            Address.remove(this.id).then(res=>{
-              this.removeSuccess = true
-              setTimeout(()=>{
-                this.removeSuccess = false
-                this.$router.go(-1) 
-              },500)
-            })
+            // Address.remove(this.id).then(res=>{
+            //   this.removeSuccess = true
+            //   setTimeout(()=>{
+            //     this.removeSuccess = false
+            //     this.$router.go(-1) 
+            //   },500)
+            // })
+            this.$store.dispatch('removeAction',this.id)
           }
       },
       setDefault(){
-         Address.setDefault(this.id).then(res=>{
-            this.$router.go(-1) 
-         })
+        //  Address.setDefault(this.id).then(res=>{
+        //     this.$router.go(-1) 
+        //  })
+        this.$store.dispatch('setDefaultAction',this.id)
       }
     }
 }
