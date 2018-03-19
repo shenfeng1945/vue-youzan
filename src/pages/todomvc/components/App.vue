@@ -7,33 +7,37 @@
                placeholder="What needs to be done?"
                @keyup.enter="addTodo()"
                v-model="val">
+        <svg :class="{gray:!allChecked,hide:!filterList.length}" @click="selectAll({isSelected:!allChecked})"><use xlink:href="#icon-down1"></use></svg>
       </header>
       <section>
           <ul class="todoList">
-              <li v-for="(list,index) in lists" :key="index">
-                  <input type="checkbox" v-model="list.isSelected">
-                  <label :class="{completed:list.isSelected}">{{list.content}}</label>
-                  <button @click="removeTodo(index)" class="remove">X</button>
-              </li>
+             <todo v-for="(list,index) in filterList" :key="index" :index="index" :list="list"></todo> 
           </ul>
       </section>
       <footer v-show="lists.length!==0">
          <span class="left">{{left}} {{left | number}} left</span>
          <ul>
-             <li><a class="active" href="">All</a></li>
-             <li><a href="">Active</a></li>
-             <li><a href="">Complete</a></li>
+             <li v-for="(val,key) in filters" :key="key"><a :class="{active:visibility===key}" @click="visibility=key" href="javascript:;">{{key|capitalize}}</a></li>
          </ul>
-         <span class="clearAll" v-show="haveCompleted">Clear completed</span>
+         <span class="clearAll" v-show="haveCompleted" @click="clearCompleted">Clear completed</span>
       </footer>
   </div>
 </template>
 <script>
+    import Todo from './Todo'
+    import {mapState,mapActions,mapMutations} from 'vuex'
+    const filters = {
+        all:lists=>lists,
+        active:lists=>lists.filter(list=>list.isSelected===false),
+        completed:lists=>lists.filter(list=>list.isSelected===true)
+    }
     export default {
         data(){
             return {
-                lists:[],
-                val:'',
+              val:'',
+              mode:0,
+              filters:filters,
+              visibility:'all'
             }
         },
         computed:{
@@ -46,26 +50,56 @@
                return this.lists.filter(item=>{
                    return item.isSelected === false
                }).length
+           },
+           ...mapState(['control']),
+           lists(){
+               return this.$store.state.lists
+           },
+           filterList(){
+               return filters[this.visibility](this.lists)
+           },
+           allChecked(){
+               return this.filterList.every(item=>{
+                   item.isSelected === true
+               })
            }
         },
         methods:{
+            ...mapActions(['addAction','inputAction']),
+            ...mapMutations(['clearCompleted']),
             addTodo(){
-              if(this.val.trim()===''){return}
-              this.lists.push({
-                 content:this.val.trim(),
-                 isSelected:false
-              })
+              this.$store.dispatch('addAction',this.val)
               this.val = ''
             },
-            removeTodo(index){
-              this.lists.splice(index,1)
+            triggle(index){
+              this.control.forEach(item=>{
+                  item.click = false
+              })
+              this.control[index].click = true
+              this.mode = index
+            //   this.$store.dispatch('triggleAction',index)
+            },
+            selectAll({isSelected}){
+                console.log(isSelected)
+            //   let lists = this.filters[this.visibility](this.lists)
+            //   let isAll = lists.some(item=>{
+            //       item.isSelected === false
+            //   })
+            //    lists.forEach(item=>{
+            //        item.isSelected = isAll?true:false
+            //    })
+
             }
         },
         filters:{
            number(val){
                return val===1?'item':'items'
+           },
+           capitalize(val){
+               return val.charAt(0).toUpperCase()+val.slice(1)
            }
-        }
+        },
+        components:{Todo}
     }
 </script>
 <style scoped>
@@ -81,6 +115,7 @@
   }
   header{
       text-align: center;
+      position: relative;
   }
   header .new-todo{
     padding: 16px 16px 16px 60px;
@@ -91,20 +126,7 @@
     width: 100%;
   }
   .todoList{background:#fff;}
-  .todoList li{display: flex;align-items: center;padding:5px;position: relative;}
-  .todoList li label{
-      word-break: break-all;
-      padding:5px;
-  }
-  .todoList li .completed{
-      text-decoration:line-through;
-      color:#666;
-  }
-  .todoList li .remove{
-      position: absolute;
-      right:10px;top:50%;
-      transform: translate(-50%,-50%);
-  }
+  
   footer{
       display: flex;
       background:#fff;
@@ -135,6 +157,19 @@
   }
   footer ul li a.active{
     border:1px solid rgba(175, 47, 47, 0.2);
+  }
+  svg{
+      width:24px;
+      height:24px;
+      position: absolute;
+      left:10px;bottom:18px;
+      fill:#737373;
+  }
+  svg.gray{
+      fill:#e6e6e6;
+  }
+  svg.hide{
+      display: none;
   }
 </style>
 
