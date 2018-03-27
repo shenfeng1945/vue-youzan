@@ -7,7 +7,7 @@
           </a>
         </div>
       </div>
-      <div class="swiper-pagination"></div>
+      <div class="swiper-pagination" style="text-align:center;"></div>
     </div>
 </template>
 <script>
